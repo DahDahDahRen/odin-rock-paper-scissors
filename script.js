@@ -1,5 +1,3 @@
-console.log("Hello World");
-
 // The computer player must randomly generate either rock, paper, or scissor
 
 // The human player must be able to input either rock, paper, or scissorr
@@ -13,6 +11,11 @@ console.log("Hello World");
 // The game should be played for five rounds
 
 function app() {
+  const selectionContainer = document.querySelector(
+    ".rock-paper-scissor-container"
+  );
+  const displayText = document.querySelector(".display-text");
+
   //* Computer Choice
   //! Generate random computer choice
   function getComputerChoice() {
@@ -36,19 +39,21 @@ function app() {
 
   //* Human Inputed Choice
   //! Human player shall input a choice to a prompt
-  function getHumanChoice() {
-    const humanChoice = prompt("Rock, Paper, or Scissor?");
+  // function getHumanChoice() {
+  //   const humanChoice = prompt("Rock, Paper, or Scissor?");
 
-    if (humanChoice === "") {
-      console.log("You did not made the choice!");
-    } else {
-      return humanChoice.toLowerCase();
-    }
-  }
+  //   if (humanChoice === "") {
+  //     console.log("You did not made the choice!");
+  //   } else {
+  //     return humanChoice.toLowerCase();
+  //   }
+  // }
 
   //* Play game function
   function playGame() {
     //* App Variable
+    const gameOverAfterRoundFive = 5;
+    let roundsPlayed = 0;
     let humanScore = 0;
     let computerScore = 0;
 
@@ -122,16 +127,31 @@ function app() {
       }
     }
 
-    let humanSelection = getHumanChoice();
-    let computerSelection = getComputerChoice();
+    selectionContainer.addEventListener("click", (e) => {
+      if (e.target.classList.contains("button")) {
+        //Get human and computer choice
+        let humanChoiceSelection = e.target.dataset.choice;
+        let computerSelection = getComputerChoice();
 
-    playRound(humanSelection, computerSelection);
+        //Game State and Rounds played
+        if (roundsPlayed < gameOverAfterRoundFive) {
+          roundsPlayed = roundsPlayed + 1;
+
+          displayText.textContent = `Round: ${roundsPlayed}`;
+
+          return playRound(humanChoiceSelection, computerSelection);
+        }
+
+        //Display result game over
+        if (roundsPlayed === gameOverAfterRoundFive) {
+          roundsPlayed = 0;
+
+          return (displayText.textContent = `Game over!`);
+        }
+      }
+    });
   }
 
-  playGame();
-  playGame();
-  playGame();
-  playGame();
   playGame();
 }
 
